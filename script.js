@@ -94,8 +94,8 @@ function onResults(results) {
         }
         window?.ReactNativeWebView?.postMessage(JSON.stringify(
             {
-                // pose: JSON.stringify(results.poseLandmarks),
-                fps: fps.toFixed(2)
+                pose: JSON.stringify(results.poseLandmarks),
+                // fps: fps.toFixed(2)
             }
         ));
         drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS,
