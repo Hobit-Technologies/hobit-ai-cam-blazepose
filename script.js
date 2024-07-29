@@ -9,6 +9,7 @@ let params = new URLSearchParams(url.search);
 
 const isFullScreen = params.get("isFullScreen") || false;
 const isBackCamera = params.get("isBackCamera") || false;
+const enablePose = params.get("enablePose") || false;
 
 if (isFullScreen) {
   canvasCtx.canvas.width = window.innerWidth;
@@ -96,7 +97,9 @@ function onResults(results) {
     for (let i = 0; i < results.poseLandmarks.length; i++) {
       // console.log(`Landmark ${i}: (${results.poseLandmarks[i].x}, ${results.poseLandmarks[i].y})`);
     }
-    window?.ReactNativeWebView?.postMessage(JSON.stringify(results.poseLandmarks));
+    window?.ReactNativeWebView?.postMessage(
+      JSON.stringify(results.poseLandmarks)
+    );
     // change
     // drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS,
     //                {color: 'white', lineWidth: 4});
@@ -111,7 +114,7 @@ function onResults(results) {
     //     lineWidth: 2,
     //     radius: 10,
     //   });
-    
+
     // drawLandmarks(canvasCtx, filteredLandmarks, {
     //     color: "rgba(133, 251, 255, 0.2)",
     //     lineWidth: 2,
@@ -119,17 +122,18 @@ function onResults(results) {
     //   });
 
     // blue dots
-    // drawLandmarks(canvasCtx, filteredLandmarks, {
-    //     color: "rgba(133, 251, 255, 0.6)",
-    //     lineWidth: 2,
-    //     radius: 12,
-    //   });
-    // drawLandmarks(canvasCtx, filteredLandmarks, {
-    //   color: "#85FBFF",
-    //   lineWidth: 2,
-    //   radius: 4,
-    // });
-    
+    if (enablePose) {
+      drawLandmarks(canvasCtx, filteredLandmarks, {
+        color: "rgba(133, 251, 255, 0.6)",
+        lineWidth: 2,
+        radius: 12,
+      });
+      drawLandmarks(canvasCtx, filteredLandmarks, {
+        color: "#85FBFF",
+        lineWidth: 2,
+        radius: 4,
+      });
+    }
   }
   canvasCtx.restore();
 }
