@@ -122,7 +122,7 @@ function onResults(results) {
     //   });
 
     // blue dots
-    if (enablePose) {
+    if (enablePose === 'true') {
       drawLandmarks(canvasCtx, filteredLandmarks, {
         color: "rgba(133, 251, 255, 0.6)",
         lineWidth: 2,
