@@ -10,6 +10,31 @@ let params = new URLSearchParams(url.search);
 const isFullScreen = params.get("isFullScreen") || false;
 const isBackCamera = params.get("isBackCamera") || false;
 const enablePose = params.get("enablePose") || false;
+const parentOrigin = params.get("parentOrigin") || "*";
+
+function postPoseLandmarksToParent(landmarks) {
+  try {
+    if (
+      typeof window === "undefined" ||
+      !window.parent ||
+      window.parent === window
+    ) {
+      return;
+    }
+
+    window.parent.postMessage(
+      {
+        source: "hobfit-ai-cam",
+        payload: {
+          landmarks,
+        },
+      },
+      parentOrigin
+    );
+  } catch (error) {
+    console.warn("[Hobfit AI Cam] Failed to post landmarks to parent", error);
+  }
+}
 
 if (isFullScreen) {
   canvasCtx.canvas.width = window.innerWidth;
@@ -100,6 +125,7 @@ function onResults(results) {
     window?.ReactNativeWebView?.postMessage(
       JSON.stringify(results.poseLandmarks)
     );
+    postPoseLandmarksToParent(results.poseLandmarks);
     // change
     // drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS,
     //                {color: 'white', lineWidth: 4});
